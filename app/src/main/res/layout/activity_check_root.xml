@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+ <androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".CheckRootActivity">
+
+    <Button
+        android:id="@+id/checkSu"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:text="CheckSu"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/checkFile" />
+
+    <Button
+        android:id="@+id/checkFile"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:text="CheckFile"
+        app:layout_constraintStart_toStartOf="@+id/checkSu"
+        app:layout_constraintTop_toBottomOf="@+id/checkSu"
+        app:layout_constraintBottom_toTopOf="@+id/checkWritePermission" />
+
+    <Button
+        android:id="@+id/checkWritePermission"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:text="CheckWritePermission"
+        app:layout_constraintStart_toStartOf="@+id/checkFile"
+        app:layout_constraintTop_toBottomOf="@+id/checkFile"
+        app:layout_constraintBottom_toTopOf="@+id/checkBuild" />
+
+    <Button
+        android:id="@+id/checkBuild"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:text="CheckBuild"
+        app:layout_constraintStart_toStartOf="@+id/checkWritePermission"
+        app:layout_constraintTop_toBottomOf="@+id/checkWritePermission"
+        app:layout_constraintBottom_toTopOf="@+id/checkUseSo" />
+
+    <Button
+        android:id="@+id/checkUseSo"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:text="CheckUseSo"
+        app:layout_constraintStart_toStartOf="@+id/checkBuild"
+        app:layout_constraintTop_toBottomOf="@+id/checkBuild"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <!-- 添加一个指南线来帮助对齐按钮 -->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideLine"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.1" />
+
+    <!-- TextView 示例，保持不变 -->
+     <TextView
+         android:id="@+id/checkText"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_marginStart="172dp"
+         android:layout_marginTop="40dp"
+         android:text="checkText"
+         app:layout_constraintStart_toStartOf="parent"
+         app:layout_constraintTop_toTopOf="parent" />
+ </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
