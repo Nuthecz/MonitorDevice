@@ -18,10 +18,11 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
-    }
 
-    buildFeatures {
-        dataBinding = true // 确保这里启用了数据绑定
+        ndk {
+            abiFilters.addAll(arrayOf("arm64-v8a", "x86_64"))
+        }
+
     }
 
     buildTypes {
@@ -46,6 +47,7 @@ android {
     buildFeatures {
         viewBinding = true
         compose = true
+        dataBinding = true // 确保这里启用了数据绑定
     }
     kotlinOptions {
         jvmTarget = "1.8"

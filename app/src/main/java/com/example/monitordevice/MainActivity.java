@@ -39,6 +39,17 @@ public class MainActivity extends BaseActivity {
                 startActivity(intent);
             }
         });
+
+        // 设置按钮跳转到检测 Frida 的 Activity
+        Button fridaCheck = binding.fridacheck;
+        fridaCheck.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View view){
+                Toast.makeText(MainActivity.this, "You Click the fridaCheck Activity", Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "You Click the fridaCheck Activity");
+                Intent intent = new Intent(MainActivity.this, CheckFridaActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     /**

@@ -90,5 +90,6 @@ public class CheckRootActivity extends BaseActivity {
         });
     }
 
+
     public native void checkUseso(String[] targetPaths, String[] fileNames);
 }

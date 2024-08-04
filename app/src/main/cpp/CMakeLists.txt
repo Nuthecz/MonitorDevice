@@ -12,6 +12,7 @@ include_directories(
 # with ${CMAKE_PROJECT_NAME} (both CMake variables are in-sync within the top level
 # build script scope).
 project("monitordevice")
+enable_language(ASM)
 
 # Creates and names a library, sets it as either STATIC
 # or SHARED, and provides the relative paths to its source code.
@@ -37,6 +38,18 @@ add_library(
         SHARED
         # List C/C++ source files with relative paths to this CMakeLists.txt.
         checkroot.cpp)
+add_library(
+        # so 文件的名字
+        checkfrida
+        # 共享库
+        SHARED
+        # List C/C++ source files with relative paths to this CMakeLists.txt.
+        checkfrida.cpp
+        dlfcn/local_dlfcn.h
+        dlfcn/local_dlfcn.cpp
+        asm/bionic_asm.h
+        asm/syscall.S
+)
 
 # Specifies libraries CMake should link to your target library. You
 # can link libraries from various origins, such as libraries defined in this
@@ -52,3 +65,9 @@ target_link_libraries(
         android
         log
         )
+target_link_libraries(
+        checkfrida
+        # List libraries link to the target library
+        android
+        log
+)

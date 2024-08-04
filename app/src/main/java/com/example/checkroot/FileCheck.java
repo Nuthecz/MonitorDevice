@@ -75,6 +75,5 @@ public class FileCheck extends RootCheck{
                 }
             }
         }
-        return ;
     }
 }
