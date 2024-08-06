@@ -7,75 +7,159 @@
 
     </data>
 
- <androidx.constraintlayout.widget.ConstraintLayout
-    android:id="@+id/main"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".CheckRootActivity">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".CheckRootActivity"
+        android:background="@color/white"
+        android:id="@+id/rootCheck">
 
-    <Button
-        android:id="@+id/checkSu"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:text="CheckSu"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/checkFile" />
-
-    <Button
-        android:id="@+id/checkFile"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:text="CheckFile"
-        app:layout_constraintStart_toStartOf="@+id/checkSu"
-        app:layout_constraintTop_toBottomOf="@+id/checkSu"
-        app:layout_constraintBottom_toTopOf="@+id/checkWritePermission" />
-
-    <Button
-        android:id="@+id/checkWritePermission"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:text="CheckWritePermission"
-        app:layout_constraintStart_toStartOf="@+id/checkFile"
-        app:layout_constraintTop_toBottomOf="@+id/checkFile"
-        app:layout_constraintBottom_toTopOf="@+id/checkBuild" />
-
-    <Button
-        android:id="@+id/checkBuild"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:text="CheckBuild"
-        app:layout_constraintStart_toStartOf="@+id/checkWritePermission"
-        app:layout_constraintTop_toBottomOf="@+id/checkWritePermission"
-        app:layout_constraintBottom_toTopOf="@+id/checkUseSo" />
-
-    <Button
-        android:id="@+id/checkUseSo"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:text="CheckUseSo"
-        app:layout_constraintStart_toStartOf="@+id/checkBuild"
-        app:layout_constraintTop_toBottomOf="@+id/checkBuild"
-        app:layout_constraintBottom_toBottomOf="parent" />
-
-    <!-- 添加一个指南线来帮助对齐按钮 -->
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideLine"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.1" />
-
-    <!-- TextView 示例，保持不变 -->
      <TextView
-         android:id="@+id/checkText"
+         android:id="@+id/root"
          android:layout_width="wrap_content"
          android:layout_height="wrap_content"
-         android:layout_marginStart="172dp"
-         android:layout_marginTop="40dp"
-         android:text="checkText"
+         android:fontFamily="sans-serif-light"
+         android:text="@string/root"
+         android:textSize="38sp"
+         app:layout_constraintBottom_toBottomOf="parent"
+         app:layout_constraintEnd_toEndOf="parent"
          app:layout_constraintStart_toStartOf="parent"
-         app:layout_constraintTop_toTopOf="parent" />
- </androidx.constraintlayout.widget.ConstraintLayout>
+         app:layout_constraintTop_toTopOf="parent"
+         app:layout_constraintVertical_bias=".1"
+         app:layout_constraintHorizontal_bias=".15" />
+
+     <TextView
+         android:id="@+id/detectionRoot"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:text="@string/detection"
+         android:textColor="@color/black"
+         android:textSize="56sp"
+         android:textStyle="bold"
+         app:layout_constraintHorizontal_bias="0"
+         app:layout_constraintVertical_bias="0"
+         app:layout_constraintBottom_toBottomOf="parent"
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintStart_toStartOf="@+id/root"
+         app:layout_constraintTop_toBottomOf="@+id/root" />
+
+
+        <Button
+            android:id="@+id/checkSu"
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:text="@string/check_su"
+            android:textAllCaps="false"
+            android:background="@drawable/button_bg"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.15"
+            app:layout_constraintVertical_bias=".1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/detectionRoot" />
+
+        <Button
+            android:id="@+id/checkFile"
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_bg"
+            android:text="@string/check_file"
+            android:textAllCaps="false"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="@+id/checkSu"
+            app:layout_constraintTop_toBottomOf="@+id/detectionRoot"
+            app:layout_constraintVertical_bias=".25" />
+
+        <Button
+            android:id="@+id/checkWritePermission"
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_bg"
+            android:text="@string/check_permission"
+            android:textAllCaps="false"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="@+id/checkFile"
+            app:layout_constraintTop_toBottomOf="@+id/detectionRoot"
+            app:layout_constraintVertical_bias=".4" />
+
+        <Button
+            android:id="@+id/checkBuild"
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_bg"
+            android:text="@string/check_build"
+            android:textAllCaps="false"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="@+id/checkWritePermission"
+            app:layout_constraintTop_toBottomOf="@+id/detectionRoot"
+            app:layout_constraintVertical_bias=".55" />
+
+        <Button
+            android:id="@+id/checkUseSo"
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_bg"
+            android:text="@string/check_use_so"
+            android:textAllCaps="false"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="@+id/checkBuild"
+            app:layout_constraintTop_toBottomOf="@+id/detectionRoot"
+            app:layout_constraintVertical_bias=".7" />
+
+        <View
+            android:id="@+id/view"
+            android:layout_width="4dp"
+            android:layout_height="340dp"
+            android:background="@color/purple_700"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/detectionRoot"
+            app:layout_constraintVertical_bias="0.25" />
+
+        <TextView
+            android:id="@+id/outputRoot"
+            android:layout_width="0dp"
+            android:layout_height="80dp"
+            android:background="@drawable/output_bg"
+            android:elevation="4dp"
+            android:fontFamily="sans-serif-light"
+            android:gravity="center"
+            android:paddingTop="15dp"
+            android:paddingBottom="10dp"
+            android:text="@string/hint_"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/view"
+            app:layout_constraintTop_toBottomOf="@+id/detectionRoot"
+            app:layout_constraintVertical_bias="0.339"
+            app:layout_constraintWidth_percent="0.45" />
+
+        <Button
+            android:id="@+id/backRoot"
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="24dp"
+            android:background="@drawable/button_bg"
+            android:text="@string/back"
+            android:textAllCaps="false"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/outputRoot"
+            app:layout_constraintVertical_bias="0.425" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

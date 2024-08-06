@@ -1,9 +1,5 @@
-//
-// Created by NU on 2024/7/29.
-//
-
 #include "local_dlfcn.h"
-#include "../basic.h"
+#include "basic.h"
 #ifdef __LP64__
 #define Elf_Ehdr Elf64_Ehdr
 #define Elf_Shdr Elf64_Shdr

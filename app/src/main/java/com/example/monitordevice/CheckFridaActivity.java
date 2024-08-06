@@ -12,7 +12,7 @@ import com.example.monitordevice.databinding.ActivityCheckFridaBinding;
 public class CheckFridaActivity extends BaseActivity {
 
     private ActivityCheckFridaBinding binding;
-
+    private TextView outputFrida;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,21 +20,24 @@ public class CheckFridaActivity extends BaseActivity {
 
         binding = ActivityCheckFridaBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
-        // 设置标题
-        TextView tv = binding.checkText;
-        tv.setText("checkFrida");
+        outputFrida = binding.outputFrida;
 
         Button fridaCheck = binding.checkFrida;
         fridaCheck.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
-                Toast.makeText(CheckFridaActivity.this, "You Click the checkFrida", Toast.LENGTH_SHORT).show();
-                Log.d(TAG, "You Click the checkFrida");
+                Log.d(TAG, "You Click the CheckFridaActivity");
                 FridaCheck fridaCheck = new FridaCheck(CheckFridaActivity.this);
-                fridaCheck.checkFrida();
+                String retval = fridaCheck.checkFrida();
+                outputFrida.setText(retval);
+            }
+        });
+
+        Button back = binding.backFrida;
+        back.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View view){
+                Log.d(TAG, "CheckFridaActivity is over");
+                finish();
             }
         });
     }
-
-
 }

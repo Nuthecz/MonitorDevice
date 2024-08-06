@@ -17,10 +17,12 @@ public class BuildCheck extends RootCheck {
         return false;
     }
 
-    public void check(){
+    public boolean check(){
         if (checkBuild()) {
             Log.i(TAG, "Detected Root!!!(Java)");
             Log.i(TAG, "build.TAGS:" + buildtag + " build.FINGERPRINT: " + buildfinger);
+            return true;
         }
+        return false;
     }
 }

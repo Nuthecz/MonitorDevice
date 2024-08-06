@@ -41,11 +41,11 @@ public class WritePermissionCheck extends RootCheck{
         }
     }
 
-    public void check() {
+    public boolean check() {
         String[] lines = mountReader();
 
         if (lines == null){
-            return;
+            return false;
         }
 
         int sdkVersion = android.os.Build.VERSION.SDK_INT;
@@ -85,10 +85,12 @@ public class WritePermissionCheck extends RootCheck{
                             // 如果路径以读写模式挂载，显示警告信息
                             Log.i(TAG, "Detected Root!!!(Java)");
                             Log.i(TAG, pathToCheck + " The path is mounted with rw permissions " + line);
+                            return true;
                         }
                     }
                 }
             }
         }
+        return false;
     }
 }

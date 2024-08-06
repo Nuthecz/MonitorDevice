@@ -1,7 +1,20 @@
 <resources>
-    <string name="app_name">MonitorDevice</string>
+    <string name="app_name">Monitor</string>
     <string name="title_activity_check_root">CheckRootActivity</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+    <string name="monitor">Monitor</string>
+    <string name="device">Device</string>
+    <string name="root">Root</string>
+    <string name="detection">Detection</string>
+    <string name="check_su">checkSU</string>
+    <string name="check_file">checkFile</string>
+    <string name="check_permission">checkPermission</string>
+    <string name="check_build">checkBuild</string>
+    <string name="check_use_so">checkUseSo</string>
+    <string name="back">Back</string>
+    <string name="hint_">plz click the button</string>
+    <string name="check_frida">checkFrida</string>
+    <string name="frida">Frida</string>
 </resources>

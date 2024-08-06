@@ -4,8 +4,9 @@
 #include <dlfcn.h>
 #include <unistd.h>
 #include <sys/syscall.h>
-#include "basic.h"
-#include "dlfcn/local_dlfcn.h"
+#include "utils/basic.h"
+#include "utils/local_dlfcn.h"
+#include <string>
 #define MAX_PATH 256
 #define MAX_BUFFER 1024
 
@@ -111,7 +112,7 @@ bool check_maps_self() {
         if (my_strstr(line, "frida") || my_strstr(line, "gadget")) {
             close(fd);
             return true;
-        }·
+        }
 
 
         // 寻找换行符的位置
@@ -246,24 +247,33 @@ bool check_inlinehook() {
 }
 
 extern "C"
-JNIEXPORT void JNICALL
+JNIEXPORT jstring JNICALL
 Java_com_example_checkfrida_FridaCheck_checkFrida(
         JNIEnv *env,
         jobject /* this */) {
+    std::string result;
     if(check_status()){
         LOGI("Detected Frida!!!(So)");
         LOGI("Status detected");
+        result += "Status detected\n";
     }
     if(check_maps()){
         LOGI("Detected Frida!!!(So)");
         LOGI("Maps detected");
+        result += "Maps detected\n";
     }
     if(check_maps_self()){
         LOGI("Detected Frida!!!(So)");
         LOGI("Maps Self-fulfillment detected");
+        result += "Maps Self-fulfillment detected\n";
     }
     if(check_inlinehook()){
         LOGI("Detected Frida!!!(So)");
         LOGI("InlineHook detected");
+        result += "InlineHook detected\n";
     }
+    if(result.empty()){
+        result = "No Frida Detected";
+    }
+    return env->NewStringUTF(result.c_str());
 }

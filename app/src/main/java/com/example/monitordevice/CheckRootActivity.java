@@ -1,12 +1,9 @@
 package com.example.monitordevice;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.checkroot.BuildCheck;
 import com.example.checkroot.FileCheck;
@@ -18,7 +15,8 @@ import com.example.monitordevice.databinding.ActivityCheckRootBinding;
 public class CheckRootActivity extends BaseActivity {
 
     private ActivityCheckRootBinding binding;
-
+    private TextView outputRoot;
+    private boolean flag = false;
     static {
         System.loadLibrary("checkroot");
     }
@@ -26,70 +24,69 @@ public class CheckRootActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.i(TAG,"this is CheckRootActivity");
+        Log.i(TAG, "this is CheckRootActivity");
 
         binding = ActivityCheckRootBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
-        // 设置标题
-        TextView tv = binding.checkText;
-        tv.setText("checkRoot");
-
-        // 配置利用 which su 检测 root 的方式
-        Button checkSu = binding.checkSu;
-        checkSu.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View view){
-                Toast.makeText(CheckRootActivity.this, "You Click the CheckSu", Toast.LENGTH_SHORT).show();
-                Log.d(TAG, "You Click the CheckSu");
-                SuCheck suCheck = new SuCheck(CheckRootActivity.this);
-                suCheck.check();
-            }
-        });
-
-        // 配置利用非法二进制文件检测 root 的方式
-        Button checkFile = binding.checkFile;
-        checkFile.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View view){
-                Toast.makeText(CheckRootActivity.this, "You Click the CheckFile", Toast.LENGTH_SHORT).show();
-                Log.d(TAG, "You Click the CheckFile");
-                FileCheck fileCheck = new FileCheck(CheckRootActivity.this);
-                fileCheck.check();
-            }
-        });
-
-        // 配置查看特殊路径写权限检测 root 的方式
-        Button checkWritePermission = binding.checkWritePermission;
-        checkWritePermission.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View view){
-                Toast.makeText(CheckRootActivity.this, "You Click the checkWritePermission", Toast.LENGTH_SHORT).show();
-                Log.d(TAG, "You Click the checkWritePermission");
-                WritePermissionCheck writePermissionCheck = new WritePermissionCheck(CheckRootActivity.this);
-                writePermissionCheck.check();
-            }
-        });
-
-        // 配置利用 build 类信息检测 root 的方式
-        Button checkBuild = binding.checkBuild;
-        checkBuild.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View view){
-                Toast.makeText(CheckRootActivity.this, "You Click the checkBuild", Toast.LENGTH_SHORT).show();
-                Log.d(TAG, "You Click the checkBuild");
-                BuildCheck buildCheck = new BuildCheck(CheckRootActivity.this);
-                buildCheck.check();
-            }
-        });
-
-        // 配置利用 so 文件调用系统函数检测非法文件检测 root 的方式
-        Button checkUseSo = binding.checkUseSo;
-        checkUseSo.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View view){
-                Toast.makeText(CheckRootActivity.this, "You Click the checkUseSo", Toast.LENGTH_SHORT).show();
-                Log.d(TAG, "You Click the checkUseSo");
-                checkUseso(FileCheck.targetPaths, FileCheck.fileNames);
-            }
-        });
+        outputRoot = binding.outputRoot;
+        setupButtonClickListener();
     }
 
+    private void setupButtonClickListener() {
+        // 设置所有按钮的点击监听器
+        Button[] buttons = {
+                binding.checkSu,
+                binding.checkFile,
+                binding.checkWritePermission,
+                binding.checkBuild,
+                binding.checkUseSo,
+                binding.backRoot
+        };
 
-    public native void checkUseso(String[] targetPaths, String[] fileNames);
+        for (Button button : buttons) {
+            button.setOnClickListener(view -> handleButtonClick(button));
+        }
+    }
+
+    private void handleButtonClick(Button button) {
+        if (button == binding.checkSu) {
+            Log.d(TAG, "You Clicked the CheckSu");
+            flag = new SuCheck(this).check();
+            if(flag){
+                outputRoot.setText("The \"which su\" command exist");
+            }
+        } else if (button == binding.checkFile) {
+            Log.d(TAG, "You Clicked the CheckFile");
+            flag = new FileCheck(this).check();
+            if(flag){
+                outputRoot.setText("Illegal binary exist");
+            }
+        } else if (button == binding.checkWritePermission) {
+            Log.d(TAG, "You Clicked the checkWritePermission");
+            flag = new WritePermissionCheck(this).check();
+            if(flag){
+                outputRoot.setText("There is a path with rw permissions");
+            }
+        } else if (button == binding.checkBuild) {
+            Log.d(TAG, "You Clicked the checkBuild");
+            flag = new BuildCheck(this).check();
+            if(flag){
+                outputRoot.setText("build Detect Root");
+            }
+        } else if (button == binding.checkUseSo) {
+            Log.d(TAG, "You Clicked the checkUseSo");
+            flag = checkUseso(FileCheck.targetPaths, FileCheck.fileNames);
+            if(flag){
+                outputRoot.setText("Illegal binary exist");
+            }
+        } else if (button == binding.backRoot){
+            Log.i(TAG, "CheckRootActivity is over");
+            finish();
+        }
+
+        if(!flag){
+            outputRoot.setText("No Root Detected");
+        }
+    }
+    public native boolean checkUseso(String[] targetPaths, String[] fileNames);
 }

@@ -4,7 +4,7 @@
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <unistd.h>
-#include "basic.h"
+#include "utils/basic.h"
 
 bool NativeDetected(const char *path, bool usesyscall) {
     if (usesyscall) {//使用系统调用的方式，查找文件是否存在
@@ -31,7 +31,7 @@ bool NativeDetected(const char *path, bool usesyscall) {
 }
 
 extern "C"
-JNIEXPORT void JNICALL
+JNIEXPORT jboolean JNICALL
 Java_com_example_monitordevice_CheckRootActivity_checkUseso(
         JNIEnv *env,
         jobject /* this */,
@@ -59,10 +59,12 @@ Java_com_example_monitordevice_CheckRootActivity_checkUseso(
             bool ret = NativeDetected(fullPath, true);
             if (ret) {
                 LOGI("Detected Root!!!(So)");
-                LOGI("Illegal binary %s exists", fullPath);
+                LOGI("Illegal binary %s exist", fullPath);
+                return true;
             }
         }
     }
+    return false;
 }
 
 

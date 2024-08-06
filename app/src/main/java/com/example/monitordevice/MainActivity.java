@@ -1,22 +1,25 @@
 package com.example.monitordevice;
 
-import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
+import android.content.Intent;
+
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.monitordevice.databinding.ActivityMainBinding;
+import com.hitomi.cmlibrary.CircleMenu;
+import com.hitomi.cmlibrary.OnMenuSelectedListener;
 
 public class MainActivity extends BaseActivity {
 
-    static {
-        System.loadLibrary("monitordevice");
-    }
-
     private ActivityMainBinding binding;
+    private CircleMenu circleMenu;
+    private ConstraintLayout constraintLayout;
+    private Intent intent;
+    private final Handler handler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,36 +28,34 @@ public class MainActivity extends BaseActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        // 设置标题
-        TextView tv = binding.sampleText;
-        tv.setText(stringFromJNI());
+        circleMenu = binding.circleMenuMain;
+        constraintLayout = binding.constraintLayout;
+        circleMenu.setMainMenu(Color.parseColor("#CDCDCD"),R.drawable.icon_menu, R.drawable.icon_cancel)
+                .addSubMenu(Color.parseColor("#88bef5"),R.drawable.icon_root)
+                .addSubMenu(Color.parseColor("#ff8a5c"),R.drawable.icon_frida)
+                .setOnMenuSelectedListener(new OnMenuSelectedListener() {
+                    @Override
+                    public void onMenuSelected(int index) {
+                        switch (index) {
+                            case 0:
+                                Toast.makeText(MainActivity.this, "You Click the rootCheck Activity", Toast.LENGTH_SHORT).show();
+                                Log.d(TAG, "You Click the rootCheck Activity");
+                                constraintLayout.setBackgroundColor(Color.parseColor("#88bef5"));
+                                intent = new Intent(MainActivity.this, CheckRootActivity.class);
 
-        // 设置按钮跳转到检测 Root 的 Activity
-        Button rootCheck = binding.rootcheck;
-        rootCheck.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View view){
-                Toast.makeText(MainActivity.this, "You Click the rootCheck Activity", Toast.LENGTH_SHORT).show();
-                Log.d(TAG, "You Click the rootCheck Activity");
-                Intent intent = new Intent(MainActivity.this, CheckRootActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        // 设置按钮跳转到检测 Frida 的 Activity
-        Button fridaCheck = binding.fridacheck;
-        fridaCheck.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View view){
-                Toast.makeText(MainActivity.this, "You Click the fridaCheck Activity", Toast.LENGTH_SHORT).show();
-                Log.d(TAG, "You Click the fridaCheck Activity");
-                Intent intent = new Intent(MainActivity.this, CheckFridaActivity.class);
-                startActivity(intent);
-            }
-        });
+                                break;
+                            case 1:
+                                Toast.makeText(MainActivity.this, "You Click the fridaCheck Activity", Toast.LENGTH_SHORT).show();
+                                constraintLayout.setBackgroundColor(Color.parseColor("#ff8a5c"));
+                                Log.d(TAG, "You Click the fridaCheck Activity");
+                                intent = new Intent(MainActivity.this, CheckFridaActivity.class);
+                                break;
+                        }
+                        handler.postDelayed(() -> {
+                            startActivity(intent);
+                            constraintLayout.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                        }, 1000);
+                    }
+                });
     }
-
-    /**
-     * A native method that is implemented by the 'monitordevice' native library,
-     * which is packaged with this application.
-     */
-    public native String stringFromJNI();
 }

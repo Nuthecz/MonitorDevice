@@ -30,11 +30,13 @@ public class SuCheck extends RootCheck{
         }
     }
 
-    public void check() {
+    public boolean check() {
         // 检测 su 是否存在
         if (checkExistSu()) {
             Log.i(TAG, "Detected Root!!!(Java)");
-            Log.i(TAG, "The \"which su\" command exists");
+            Log.i(TAG, "The \"which su\" command exist");
+            return true;
         }
+        return false;
     }
 }

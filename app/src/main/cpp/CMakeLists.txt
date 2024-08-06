@@ -5,7 +5,7 @@
 # Sets the minimum CMake version required for this project.
 cmake_minimum_required(VERSION 3.22.1)
 include_directories(
-    basic.h
+        utils/basic.h
 )
 # Declares the project name. The project name can be accessed via ${ PROJECT_NAME},
 # Since this is the top level CMakeLists.txt, the project name is also accessible
@@ -27,10 +27,6 @@ enable_language(ASM)
 # System.loadLibrary() and pass the name of the library defined here;
 # for GameActivity/NativeActivity derived applications, the same library name must be
 # used in the AndroidManifest.xml file.
-add_library(${CMAKE_PROJECT_NAME} SHARED
-        # List C/C++ source files with relative paths to this CMakeLists.txt.
-        native-lib.cpp
-)
 add_library(
         # so 文件的名字
         checkroot
@@ -45,8 +41,8 @@ add_library(
         SHARED
         # List C/C++ source files with relative paths to this CMakeLists.txt.
         checkfrida.cpp
-        dlfcn/local_dlfcn.h
-        dlfcn/local_dlfcn.cpp
+        utils/local_dlfcn.h
+        utils/local_dlfcn.cpp
         asm/bionic_asm.h
         asm/syscall.S
 )
@@ -54,11 +50,6 @@ add_library(
 # Specifies libraries CMake should link to your target library. You
 # can link libraries from various origins, such as libraries defined in this
 # build script, prebuilt third-party libraries, or Android system libraries.
-target_link_libraries(${CMAKE_PROJECT_NAME}
-        # List libraries link to the target library
-        android
-        log
-        )
 target_link_libraries(
         checkroot
         # List libraries link to the target library

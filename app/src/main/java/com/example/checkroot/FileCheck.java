@@ -59,11 +59,10 @@ public class FileCheck extends RootCheck{
         return paths.toArray(new String[0]);
     }
 
-    public void check() {
+    public boolean check() {
         // 获取可能的文件路径列表
         String[] pathsArray = this.getPaths();
 
-        boolean flag = false;
         // 遍历所有路径, 检查可疑文件是否在这些路径中存在
         for (String path : pathsArray) {
             for(String filename : fileNames){
@@ -71,9 +70,11 @@ public class FileCheck extends RootCheck{
                 boolean fileExists = f.exists(); // 检查文件是否存在,实际调用的是系统调用 faccessat
                 if (fileExists) {
                     Log.i(TAG, "Detected Root!!!(Java)");
-                    Log.i(TAG, "Illegal binary " + path + filename + " exists");
+                    Log.i(TAG, "Illegal binary " + path + filename + " exist");
+                    return true;
                 }
             }
         }
+        return false;
     }
 }

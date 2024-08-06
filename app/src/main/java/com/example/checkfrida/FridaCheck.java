@@ -14,5 +14,5 @@ public class FridaCheck {
         this.checkFridaActivity = checkFridaActivity;
     }
 
-    public native void checkFrida();
+    public native String checkFrida();
 }
