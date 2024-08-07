@@ -17,4 +17,6 @@
     <string name="hint_">plz click the button</string>
     <string name="check_frida">checkFrida</string>
     <string name="frida">Frida</string>
+    <string name="hook">Hook</string>
+    <string name="check_Hook">checkHook</string>
 </resources>

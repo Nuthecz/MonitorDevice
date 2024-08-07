@@ -4,8 +4,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.example.checkfrida.FridaCheck;
 import com.example.monitordevice.databinding.ActivityCheckFridaBinding;
 
@@ -17,15 +15,16 @@ public class CheckFridaActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.i(TAG, "this is CheckFridaActivity");
 
         binding = ActivityCheckFridaBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         outputFrida = binding.outputFrida;
 
-        Button fridaCheck = binding.checkFrida;
-        fridaCheck.setOnClickListener(new View.OnClickListener(){
+        Button checkFrida = binding.checkFrida;
+        checkFrida.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
-                Log.d(TAG, "You Click the CheckFridaActivity");
+                Log.d(TAG, "You Clicked the CheckFrida");
                 FridaCheck fridaCheck = new FridaCheck(CheckFridaActivity.this);
                 String retval = fridaCheck.checkFrida();
                 outputFrida.setText(retval);

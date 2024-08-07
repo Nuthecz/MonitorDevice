@@ -1,9 +1,6 @@
-#include <jni.h>
-#include <string>
 #include <sys/syscall.h>
 #include <fcntl.h>
 #include <sys/stat.h>
-#include <unistd.h>
 #include "utils/basic.h"
 
 bool NativeDetected(const char *path, bool usesyscall) {

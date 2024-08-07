@@ -1,18 +1,15 @@
-#include <jni.h>
-#include <string.h>
 #include <dirent.h>
 #include <dlfcn.h>
-#include <unistd.h>
 #include <sys/syscall.h>
 #include "utils/basic.h"
 #include "utils/local_dlfcn.h"
-#include <string>
+
 #define MAX_PATH 256
 #define MAX_BUFFER 1024
 
 bool check_maps() {
     char line[512];
-    FILE* fp = fopen("/proc/self/maps", "r");
+    FILE *fp = fopen("/proc/self/maps", "r");
     if (fp) {
         // 如果文件成功打开，循环读取每一行
         while (fgets(line, sizeof(line), fp)) {
@@ -30,10 +27,10 @@ bool check_maps() {
 }
 
 extern "C" int
-my_openat(int dirfd, const char *const __pass_object_size pathname, int flags, mode_t modes);
+my_openat_svc(int dirfd, const char *const __pass_object_size pathname, int flags, mode_t modes);
 
 __attribute__((always_inline))
-static inline int my_openat1(const char *pathname) {
+static inline int my_openat(const char *pathname) {
     int fd;
     fd = syscall(SYS_openat, AT_FDCWD, pathname, O_RDONLY, 0);
     if (fd == -1) {
@@ -41,38 +38,32 @@ static inline int my_openat1(const char *pathname) {
     }
     return fd;
 }
-//    int fd = my_openat(AT_FDCWD, "/proc/self/maps", O_RDONLY | O_CLOEXEC, 0);
 
 
 __attribute__((always_inline))
-static inline char *my_strchr(const char *s, const char ch)
-{
+static inline char *my_strchr(const char *s, const char ch) {
     if (NULL == s)
         return NULL;
 
     const char *pSrc = s;
-    while ('\0' != *pSrc)
-    {
-        if (*pSrc == ch)
-        {
-            return (char *)pSrc;
+    while ('\0' != *pSrc) {
+        if (*pSrc == ch) {
+            return (char *) pSrc;
         }
-        ++ pSrc;
+        ++pSrc;
     }
     return NULL;
 }
 
 __attribute__((always_inline))
-static inline bool my_strstr(const char *str1, const char *str2)
-{
-    char *cp = (char *)str1;
+static inline bool my_strstr(const char *str1, const char *str2) {
+    char *cp = (char *) str1;
     char *s1, *s2;
     if (!*str2)
-        return (char *)str1;
-    while (*cp)
-    {
+        return (char *) str1;
+    while (*cp) {
         s1 = cp;
-        s2 = (char *)str2;
+        s2 = (char *) str2;
         while (*s2 && !(*s1 - *s2))
             s1++, s2++;
         if (!*s2)
@@ -83,7 +74,8 @@ static inline bool my_strstr(const char *str1, const char *str2)
 }
 
 bool check_maps_self() {
-    int fd = my_openat1("/proc/self/maps");
+//    int fd = my_openat("/proc/self/maps");
+    int fd = my_openat_svc(AT_FDCWD, "/proc/self/maps", O_RDONLY | O_CLOEXEC, 0);
     if (fd == -1) {
         LOGE("Failed to open /proc/self/maps");
         return false;
@@ -91,10 +83,8 @@ bool check_maps_self() {
 
     char buffer[512]; // 假设每行不超过512字节
     char *line = NULL;
-    size_t len = 0;
     ssize_t bytesRead;
     ssize_t bytesWritten = 0;
-    bool found = false;
 
     while (true) {
         bytesRead = read(fd, buffer, sizeof(buffer) - 1);
@@ -113,7 +103,6 @@ bool check_maps_self() {
             close(fd);
             return true;
         }
-
 
         // 寻找换行符的位置
         char *newline = my_strchr(line, '\n');
@@ -156,7 +145,8 @@ bool check_status() {
                     continue;
                 }
                 // 构造每个线程的状态文件路径，然后读取内容
-                snprintf(status_path, sizeof(status_path), "/proc/self/task/%s/status", entry->d_name);
+                snprintf(status_path, sizeof(status_path), "/proc/self/task/%s/status",
+                         entry->d_name);
                 if (read_file(status_path, buffer, sizeof(buffer)) == -1) {
                     continue;
                 }
@@ -169,7 +159,8 @@ bool check_status() {
                     if (strstr(line, "Name:") != NULL) {
                         // 检查线程名称是否包含 Frida 相关的字符串
                         const char *frida_name = strstr(line, "gmain");
-                        if (frida_name || strstr(line, "gum-js-loop") || strstr(line, "pool-frida") || strstr(line, "gdbus")) {
+                        if (frida_name || strstr(line, "gum-js-loop") ||
+                            strstr(line, "pool-frida") || strstr(line, "gdbus")) {
                             found = true;
                             break;
                         }
@@ -252,27 +243,34 @@ Java_com_example_checkfrida_FridaCheck_checkFrida(
         JNIEnv *env,
         jobject /* this */) {
     std::string result;
-    if(check_status()){
+    if (check_status()) {
         LOGI("Detected Frida!!!(So)");
         LOGI("Status detected");
-        result += "Status detected\n";
+        result += "Status detected";
     }
-    if(check_maps()){
+
+    if (check_maps()) {
+        if(!result.empty()) result += "\n";
         LOGI("Detected Frida!!!(So)");
         LOGI("Maps detected");
-        result += "Maps detected\n";
+        result += "Maps detected";
     }
-    if(check_maps_self()){
+
+    if (check_maps_self()) {
+        if(!result.empty()) result += "\n";
         LOGI("Detected Frida!!!(So)");
         LOGI("Maps Self-fulfillment detected");
-        result += "Maps Self-fulfillment detected\n";
+        result += "Maps Self-fulfillment detected";
     }
-    if(check_inlinehook()){
+
+    if (check_inlinehook()) {
+        if(!result.empty()) result += "\n";
         LOGI("Detected Frida!!!(So)");
         LOGI("InlineHook detected");
-        result += "InlineHook detected\n";
+        result += "InlineHook detected";
     }
-    if(result.empty()){
+
+    if (result.empty()) {
         result = "No Frida Detected";
     }
     return env->NewStringUTF(result.c_str());

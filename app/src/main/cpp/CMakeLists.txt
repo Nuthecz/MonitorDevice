@@ -46,7 +46,11 @@ add_library(
         asm/bionic_asm.h
         asm/syscall.S
 )
-
+add_library(
+        checkhook
+        SHARED
+        checkhook.cpp
+)
 # Specifies libraries CMake should link to your target library. You
 # can link libraries from various origins, such as libraries defined in this
 # build script, prebuilt third-party libraries, or Android system libraries.
@@ -59,6 +63,11 @@ target_link_libraries(
 target_link_libraries(
         checkfrida
         # List libraries link to the target library
+        android
+        log
+)
+target_link_libraries(
+        checkhook
         android
         log
 )
