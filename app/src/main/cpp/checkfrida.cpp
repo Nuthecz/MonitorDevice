@@ -1,6 +1,5 @@
 #include <dirent.h>
 #include <dlfcn.h>
-#include <sys/syscall.h>
 #include "utils/basic.h"
 #include "utils/local_dlfcn.h"
 
@@ -26,52 +25,9 @@ bool check_maps() {
     return false;
 }
 
+
 extern "C" int
 my_openat_svc(int dirfd, const char *const __pass_object_size pathname, int flags, mode_t modes);
-
-__attribute__((always_inline))
-static inline int my_openat(const char *pathname) {
-    int fd;
-    fd = syscall(SYS_openat, AT_FDCWD, pathname, O_RDONLY, 0);
-    if (fd == -1) {
-        return -1;
-    }
-    return fd;
-}
-
-
-__attribute__((always_inline))
-static inline char *my_strchr(const char *s, const char ch) {
-    if (NULL == s)
-        return NULL;
-
-    const char *pSrc = s;
-    while ('\0' != *pSrc) {
-        if (*pSrc == ch) {
-            return (char *) pSrc;
-        }
-        ++pSrc;
-    }
-    return NULL;
-}
-
-__attribute__((always_inline))
-static inline bool my_strstr(const char *str1, const char *str2) {
-    char *cp = (char *) str1;
-    char *s1, *s2;
-    if (!*str2)
-        return (char *) str1;
-    while (*cp) {
-        s1 = cp;
-        s2 = (char *) str2;
-        while (*s2 && !(*s1 - *s2))
-            s1++, s2++;
-        if (!*s2)
-            return cp;
-        cp++;
-    }
-    return false;
-}
 
 bool check_maps_self() {
 //    int fd = my_openat("/proc/self/maps");
@@ -99,13 +55,13 @@ bool check_maps_self() {
         buffer[bytesRead] = '\0'; // 确保字符串以'\0'结尾
         line = buffer;
         // 查找关键字
-        if (my_strstr(line, "frida") || my_strstr(line, "gadget")) {
+        if (local_strstr(line, "frida") || local_strstr(line, "gadget")) {
             close(fd);
             return true;
         }
 
         // 寻找换行符的位置
-        char *newline = my_strchr(line, '\n');
+        char *newline = local_strchr(line, '\n');
         if (newline != NULL) {
             *newline = '\0'; // 截断行
             bytesWritten = write(STDOUT_FILENO, line, strlen(line));
@@ -118,15 +74,6 @@ bool check_maps_self() {
     }
     close(fd);
     return false;
-}
-
-ssize_t read_file(const char *path, char *buffer, size_t size) {
-    int fd = open(path, O_RDONLY);
-    if (fd == -1) return -1;
-    ssize_t bytesRead = read(fd, buffer, size - 1);
-    buffer[bytesRead] = '\0';
-    close(fd);
-    return bytesRead;
 }
 
 bool check_status() {
@@ -147,7 +94,7 @@ bool check_status() {
                 // 构造每个线程的状态文件路径，然后读取内容
                 snprintf(status_path, sizeof(status_path), "/proc/self/task/%s/status",
                          entry->d_name);
-                if (read_file(status_path, buffer, sizeof(buffer)) == -1) {
+                if (local_readfile(status_path, buffer, sizeof(buffer)) == -1) {
                     continue;
                 }
                 if (strcmp(buffer, "null") == 0) {
@@ -175,99 +122,30 @@ bool check_status() {
     return found;
 }
 
-bool check_inlinehook() {
-    // 根据系统架构选择对应的libc.so库路径
-    const char *lib_path;
-#ifdef __LP64__
-    lib_path = "/system/lib64/libc.so";
-#else
-    lib_path = "/system/lib/libc.so";
-#endif
-
-    // 定义要比较的字节数
-    const int CMP_COUNT = 8;
-    // 指定要查找的符号名，这里是"open"函数
-    const char *sym_name = "open";
-
-    // 使用local_dlopen函数打开指定的共享库，并获取操作句柄
-    struct local_dlfcn_handle *handle = static_cast<local_dlfcn_handle *>(local_dlopen(lib_path));
-    if (!handle) {
-        return JNI_FALSE; // 如果无法打开共享库，返回false
-    }
-
-    // 获取"open"函数在libc.so中的偏移量
-    off_t offset = local_dlsym(handle, sym_name);
-
-    // 关闭handle，因为我们接下来使用标准的dlopen/dlsy来获取函数地址
-    local_dlclose(handle);
-
-    // 打开libc.so文件，准备读取数据
-    FILE *fp = fopen(lib_path, "rb");
-    if (!fp) {
-        return JNI_FALSE; // 如果无法打开文件，返回false
-    }
-
-    // 定义一个缓冲区，用于存储读取的文件内容
-    char file_bytes[CMP_COUNT] = {0};
-    // 读取指定偏移量处的CMP_COUNT个字节
-    fseek(fp, offset, SEEK_SET);
-    fread(file_bytes, 1, CMP_COUNT, fp);
-    fclose(fp);
-
-    // 使用dlopen函数打开libc.so共享库，并获取操作句柄
-    void *dl_handle = dlopen(lib_path, RTLD_NOW);
-    if (!dl_handle) {
-        return JNI_FALSE; // 如果无法打开共享库，返回false
-    }
-
-    // 使用dlsym函数获取"open"函数的地址
-    void *sym = dlsym(dl_handle, sym_name);
-    if (!sym) {
-        dlclose(dl_handle);
-        return JNI_FALSE; // 如果无法找到符号，返回false
-    }
-
-    // 比较原libc.so中的"open"函数内容与通过dlsym获取的"open"函数内容是否一致
-    int is_hook = memcmp(file_bytes, sym, CMP_COUNT) != 0;
-
-    // 关闭dlopen打开的共享库句柄
-    dlclose(dl_handle);
-
-    // 返回比较结果，如果函数被hook则返回JNI_TRUE，否则返回JNI_FALSE
-    return is_hook ? JNI_TRUE : JNI_FALSE;
-}
-
 extern "C"
 JNIEXPORT jstring JNICALL
-Java_com_example_checkfrida_FridaCheck_checkFrida(
+Java_com_example_checkhook_FridaCheck_checkFrida(
         JNIEnv *env,
         jobject /* this */) {
     std::string result;
     if (check_status()) {
         LOGI("Detected Frida!!!(So)");
-        LOGI("Status detected");
-        result += "Status detected";
+        LOGI("Status Detected");
+        result += "Status Detected";
     }
 
     if (check_maps()) {
         if(!result.empty()) result += "\n";
         LOGI("Detected Frida!!!(So)");
-        LOGI("Maps detected");
-        result += "Maps detected";
+        LOGI("Maps Detected");
+        result += "Maps Detected";
     }
 
     if (check_maps_self()) {
         if(!result.empty()) result += "\n";
         LOGI("Detected Frida!!!(So)");
-        LOGI("Maps Self-fulfillment detected");
-        result += "Maps Self-fulfillment detected";
-    }
-
-    if (check_inlinehook()) {
-        if(!result.empty()) result += "\n";
-        LOGI("Detected Frida!!!(So)");
-        LOGI("InlineHook detected");
-        result += "InlineHook detected";
+        LOGI("Maps Self-fulfillment Detected");
+        result += "Maps Self-fulfillment Detected";
     }
 
     if (result.empty()) {

@@ -80,6 +80,7 @@ dependencies {
     implementation(libs.material3)
     implementation(libs.activity)
     implementation("com.github.Hitomis:CircleMenu:v1.1.0")
+    implementation("com.github.ChickenHook:RestrictionBypass:2.2")
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

@@ -129,3 +129,57 @@ void local_dlclose(void *handle){
         free(handle);
     }
 }
+
+__attribute__((always_inline))
+int my_openat(const char *pathname) {
+    int fd;
+    fd = syscall(SYS_openat, AT_FDCWD, pathname, O_RDONLY, 0);
+    if (fd == -1) {
+        return -1;
+    }
+    return fd;
+}
+
+
+__attribute__((always_inline))
+char *local_strchr(const char *s, const char ch) {
+    if (NULL == s)
+        return NULL;
+
+    const char *pSrc = s;
+    while ('\0' != *pSrc) {
+        if (*pSrc == ch) {
+            return (char *) pSrc;
+        }
+        ++pSrc;
+    }
+    return NULL;
+}
+
+__attribute__((always_inline))
+bool local_strstr(const char *str1, const char *str2) {
+    char *cp = (char *) str1;
+    char *s1, *s2;
+    if (!*str2)
+        return (char *) str1;
+    while (*cp) {
+        s1 = cp;
+        s2 = (char *) str2;
+        while (*s2 && !(*s1 - *s2))
+            s1++, s2++;
+        if (!*s2)
+            return cp;
+        cp++;
+    }
+    return false;
+}
+
+ssize_t local_readfile(const char *path, char *buffer, size_t size) {
+    int fd = open(path, O_RDONLY);
+    if (fd == -1) return -1;
+    ssize_t bytesRead = read(fd, buffer, size - 1);
+    buffer[bytesRead] = '\0';
+    close(fd);
+    return bytesRead;
+}
+

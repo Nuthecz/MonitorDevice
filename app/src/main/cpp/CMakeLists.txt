@@ -36,7 +36,7 @@ add_library(
         checkroot.cpp)
 add_library(
         # so 文件的名字
-        checkfrida
+        checkhook
         # 共享库
         SHARED
         # List C/C++ source files with relative paths to this CMakeLists.txt.
@@ -45,11 +45,8 @@ add_library(
         utils/local_dlfcn.cpp
         asm/bionic_asm.h
         asm/syscall.S
-)
-add_library(
-        checkhook
-        SHARED
         checkhook.cpp
+        checkxposed.cpp
 )
 # Specifies libraries CMake should link to your target library. You
 # can link libraries from various origins, such as libraries defined in this
@@ -61,13 +58,8 @@ target_link_libraries(
         log
         )
 target_link_libraries(
-        checkfrida
-        # List libraries link to the target library
-        android
-        log
-)
-target_link_libraries(
         checkhook
+        # List libraries link to the target library
         android
         log
 )

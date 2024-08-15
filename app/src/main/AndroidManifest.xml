@@ -16,9 +16,6 @@
             android:name=".CheckHookActivity"
             android:exported="false" />
         <activity
-            android:name=".CheckFridaActivity"
-            android:exported="false" />
-        <activity
             android:name=".CheckRootActivity"
             android:exported="false" />
         <activity

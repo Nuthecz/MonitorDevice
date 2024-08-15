@@ -13,6 +13,8 @@ import com.example.monitordevice.databinding.ActivityMainBinding;
 import com.hitomi.cmlibrary.CircleMenu;
 import com.hitomi.cmlibrary.OnMenuSelectedListener;
 
+import java.text.CollationElementIterator;
+
 public class MainActivity extends BaseActivity {
 
     private ActivityMainBinding binding;
@@ -32,28 +34,20 @@ public class MainActivity extends BaseActivity {
         constraintLayout = binding.constraintLayout;
         circleMenu.setMainMenu(Color.parseColor("#CDCDCD"),R.drawable.icon_menu, R.drawable.icon_cancel)
                 .addSubMenu(Color.parseColor("#88bef5"),R.drawable.icon_root)
-                .addSubMenu(Color.parseColor("#ff8a5c"),R.drawable.icon_frida)
-                .addSubMenu(Color.parseColor("#f4ea2a"),R.drawable.icon_hook)
+                .addSubMenu(Color.parseColor("#ff8a5c"),R.drawable.icon_hook)
                 .setOnMenuSelectedListener(new OnMenuSelectedListener() {
                     @Override
                     public void onMenuSelected(int index) {
                         switch (index) {
                             case 0:
-                                Toast.makeText(MainActivity.this, "You Click the rootCheck Activity", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(MainActivity.this, "You Click the CheckRoot Activity", Toast.LENGTH_SHORT).show();
                                 Log.d(TAG, "You Click the CheckRootActivity");
                                 constraintLayout.setBackgroundColor(Color.parseColor("#88bef5"));
                                 intent = new Intent(MainActivity.this, CheckRootActivity.class);
-
                                 break;
                             case 1:
-                                Toast.makeText(MainActivity.this, "You Click the fridaCheck Activity", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(MainActivity.this, "You Click the CheckHook Activity", Toast.LENGTH_SHORT).show();
                                 constraintLayout.setBackgroundColor(Color.parseColor("#ff8a5c"));
-                                Log.d(TAG, "You Click the CheckFridaActivity");
-                                intent = new Intent(MainActivity.this, CheckFridaActivity.class);
-                                break;
-                            case 2:
-                                Toast.makeText(MainActivity.this, "You Click the hookCheck Activity", Toast.LENGTH_SHORT).show();
-                                constraintLayout.setBackgroundColor(Color.parseColor("#f4ea2a"));
                                 Log.d(TAG, "You Click the CheckHookActivity");
                                 intent = new Intent(MainActivity.this, CheckHookActivity.class);
                                 break;

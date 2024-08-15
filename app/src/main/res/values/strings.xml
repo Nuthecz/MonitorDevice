@@ -19,4 +19,7 @@
     <string name="frida">Frida</string>
     <string name="hook">Hook</string>
     <string name="check_Hook">checkHook</string>
+    <string name="xposed">Xposed</string>
+    <string name="check_Xposed">checkXposed</string>
+    <string name="so_check_Xposed">soCheckXposed</string>
 </resources>
