@@ -89,18 +89,18 @@ sectionResult getSectionCheckSum(const char *path) {
     }
 
     // 读取文件头
-    if(fread(&elfEhdr, sizeof(Elf_Ehdr), 1, fp) == 0) {
+    if (fread(&elfEhdr, sizeof(Elf_Ehdr), 1, fp) == 0) {
         LOGI("Failed to read file");
         return section;
     }
     // 解析 Section Header
-    Elf_Shdr *elfShdr = (Elf_Shdr*)malloc(sizeof(Elf64_Shdr) * elfEhdr.e_shnum);
-    if(fseek(fp, elfEhdr.e_shoff, SEEK_SET) != 0) {
+    Elf_Shdr *elfShdr = (Elf_Shdr *) malloc(sizeof(Elf64_Shdr) * elfEhdr.e_shnum);
+    if (fseek(fp, elfEhdr.e_shoff, SEEK_SET) != 0) {
         LOGI("Failed to seek file");
         return section;
     }
     // 读取所有Segment Header 到 phdr, 大小为sizeof(Elf64_Phdr) * 数量
-    if(fread(elfShdr, sizeof(Elf64_Shdr) * elfEhdr.e_shnum, 1, fp) == 0) {
+    if (fread(elfShdr, sizeof(Elf64_Shdr) * elfEhdr.e_shnum, 1, fp) == 0) {
         LOGI("Failed to read section");
         return section;
     }
@@ -113,38 +113,36 @@ sectionResult getSectionCheckSum(const char *path) {
     char shstrtab[elfShdr[elfEhdr.e_shstrndx].sh_size];
 
     // 读取内容
-    if (0 == fread(shstrtab, elfShdr[elfEhdr.e_shstrndx].sh_size, 1, fp))
-    {
+    if (0 == fread(shstrtab, elfShdr[elfEhdr.e_shstrndx].sh_size, 1, fp)) {
         LOGI("faile to read");
     }
 
     // 遍历每一个节
     int j = 0;
     section.sectionNum = 0;
-    for (int i = 0; i < elfEhdr.e_shnum; i++)
-    {
+    for (int i = 0; i < elfEhdr.e_shnum; i++) {
         // sh_flags指示该section在进程执行时的特性，SHF_EXECINSTR(当前节包含可执行的机器指令)
-        if (elfShdr[i].sh_flags & SHF_EXECINSTR){
+        if (elfShdr[i].sh_flags & SHF_EXECINSTR) {
             // shdr[i].sh_name 表示这个节名字在（.shstrtab）节内容中的偏移
-            char * temp = shstrtab + elfShdr[i].sh_name;
+            char *temp = shstrtab + elfShdr[i].sh_name;
             section.sectionName[j] = strdup(temp);
             section.offset[j] = elfShdr[i].sh_offset;
             section.memSize[j] = elfShdr[i].sh_size;
-            section.sectionNum ++;
+            section.sectionNum++;
             j++;
             if (section.sectionNum == 2)break;
         }
     }
 
     // 这里 sectionNum = 2，一个 .plt 一个 .text
-    for(int i = 0; i< section.sectionNum; i ++){
+    for (int i = 0; i < section.sectionNum; i++) {
         fseek(fp, section.offset[i], SEEK_SET);
         auto buf = calloc(1, section.memSize[i] * sizeof(uint8_t));
         if (buf == nullptr) {
             free(buf);
             return section;
         }
-        fread(buf, section.memSize[i],1,fp);
+        fread(buf, section.memSize[i], 1, fp);
         section.checkSum[i] = checkSum(buf, section.memSize[i]);
         free(buf);
     }
@@ -160,7 +158,7 @@ int compareCheckSum(char *line, sectionResult *section, const char *pathLib) {
     char path[256] = "";
     char tmp[128] = "";
     sscanf(line, "%lx-%lx %s %s %s %s", &start, &end, buf, tmp, tmp, tmp, path);
-    if(buf[2] == 'x'){
+    if (buf[2] == 'x') {
         uint8_t *buffer = (uint8_t *) start;
         for (int i = 0; i < section->sectionNum; i++) {
             auto begin = (void *) (buffer + section->offset[i]);
@@ -191,15 +189,15 @@ int getCompareResult(sectionResult *section, const char *soName) {
     while (fgets(line, sizeof(line), maps)) {
         if (strstr(line, soName) != nullptr) {
             ret = compareCheckSum(line, section, soName);
-            if(ret) break;
+            if (ret) break;
         }
     }
     fclose(maps);
     return ret;
 }
 
-bool checkInlinehook(){
-    char* libc_path = getlibc();
+bool checkInlinehook() {
+    char *libc_path = getlibc();
     // 获取本地的校验和
     auto localChecksum = getSectionCheckSum(libc_path);
     // 获取maps文件校验和并与本地进行比对
@@ -209,9 +207,10 @@ bool checkInlinehook(){
     }
     return false;
 }
-bool checkOpenFunc(){
+
+bool checkOpenFunc() {
     // 根据系统架构选择对应的libc.so库路径
-    const char* libc_path = getlibc();
+    const char *libc_path = getlibc();
 
     // 定义要比较的字节数
     const int CMP_COUNT = 8;
@@ -272,12 +271,12 @@ Java_com_example_checkhook_HookCheck_checkHook(JNIEnv *env, jobject thiz) {
     std::string result;
     // 检测inlineHook，它比 frida 处的 inlineHook 更为强力
     // 这里只要曾经被 hook，那么它就会一直显示存在 hook 行为，除非手机重启
-    if(checkInlinehook()){
+    if (checkInlinehook()) {
         result = "There is inlineHook behavior";
     }
 
-    if(checkOpenFunc()){
-        if(!result.empty()) result += "\n";
+    if (checkOpenFunc()) {
+        if (!result.empty()) result += "\n";
         LOGI("libc.so -> Open Modified");
         result += "libc.so -> Open Modified";
     }

@@ -9,8 +9,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 // 检测 su 命令检测 root
-public class SuCheck extends RootCheck{
-    public SuCheck(CheckRootActivity checkRootActivity){
+public class SuCheck extends RootCheck {
+    public SuCheck(CheckRootActivity checkRootActivity) {
         super(checkRootActivity);
     }
 

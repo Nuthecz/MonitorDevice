@@ -5,7 +5,7 @@
 
 bool NativeDetected(const char *path, bool usesyscall) {
     if (usesyscall) {//使用系统调用的方式，查找文件是否存在
-        long ret =  syscall(SYS_faccessat, AT_FDCWD, path, 0);
+        long ret = syscall(SYS_faccessat, AT_FDCWD, path, 0);
         if (ret == 0) {
             return true;
         } else {
@@ -41,12 +41,12 @@ Java_com_example_monitordevice_CheckRootActivity_checkUseso(
     // 遍历targetPaths数组
     for (int pathIndex = 0; pathIndex < pathCount; pathIndex++) {
         auto j_path = env->GetObjectArrayElement(targetPaths, pathIndex);
-        const char* path = env->GetStringUTFChars(static_cast<jstring>(j_path), nullptr);
+        const char *path = env->GetStringUTFChars(static_cast<jstring>(j_path), nullptr);
 
         // 遍历fileNames数组
         for (int nameIndex = 0; nameIndex < nameCount; nameIndex++) {
             auto j_name = env->GetObjectArrayElement(fileNames, nameIndex);
-            const char* name = env->GetStringUTFChars(static_cast<jstring>(j_name), nullptr);
+            const char *name = env->GetStringUTFChars(static_cast<jstring>(j_name), nullptr);
 
             // 组合路径
             char fullPath[PATH_MAX + 1];

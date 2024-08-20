@@ -1,4 +1,5 @@
 package com.example.checkroot;
+
 import android.util.Log;
 
 import com.example.monitordevice.CheckRootActivity;
@@ -8,8 +9,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 // 检测非法二进制文件检测 root
-public class FileCheck extends RootCheck{
-    public FileCheck(CheckRootActivity checkRootActivity){
+public class FileCheck extends RootCheck {
+    public FileCheck(CheckRootActivity checkRootActivity) {
         super(checkRootActivity);
     }
 
@@ -65,7 +66,7 @@ public class FileCheck extends RootCheck{
 
         // 遍历所有路径, 检查可疑文件是否在这些路径中存在
         for (String path : pathsArray) {
-            for(String filename : fileNames){
+            for (String filename : fileNames) {
                 File f = new File(path, filename);
                 boolean fileExists = f.exists(); // 检查文件是否存在,实际调用的是系统调用 faccessat
                 if (fileExists) {

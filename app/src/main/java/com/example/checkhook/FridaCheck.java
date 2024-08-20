@@ -10,7 +10,7 @@ public class FridaCheck {
         System.loadLibrary("checkhook");
     }
 
-    public FridaCheck(CheckHookActivity checkHookActivity){
+    public FridaCheck(CheckHookActivity checkHookActivity) {
         this.checkFridaActivity = checkHookActivity;
     }
 

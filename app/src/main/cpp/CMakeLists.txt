@@ -48,6 +48,11 @@ add_library(
         checkhook.cpp
         checkxposed.cpp
 )
+add_library(
+        checkdevice
+        SHARED
+        checkdevice.cpp
+)
 # Specifies libraries CMake should link to your target library. You
 # can link libraries from various origins, such as libraries defined in this
 # build script, prebuilt third-party libraries, or Android system libraries.
@@ -56,10 +61,15 @@ target_link_libraries(
         # List libraries link to the target library
         android
         log
-        )
+)
 target_link_libraries(
         checkhook
         # List libraries link to the target library
+        android
+        log
+)
+target_link_libraries(
+        checkdevice
         android
         log
 )

@@ -10,7 +10,7 @@ public class HookCheck {
         System.loadLibrary("checkhook");
     }
 
-    public HookCheck(CheckHookActivity checkHookActivity){
+    public HookCheck(CheckHookActivity checkHookActivity) {
         this.checkHookActivity = checkHookActivity;
     }
 

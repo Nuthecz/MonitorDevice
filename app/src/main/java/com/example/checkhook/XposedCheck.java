@@ -2,11 +2,9 @@ package com.example.checkhook;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 
 import com.example.monitordevice.CheckHookActivity;
@@ -30,11 +28,10 @@ public class XposedCheck {
         ArrayList<ClassLoader> choose = getClassLoader.choose(ClassLoader.class, true); // true的话，会获取ClassLoader所有的实例，包含其子类
 //        Log.i(TAG, "Object Number: " + choose.size());
         for (ClassLoader classLoader : choose) {
-            Log.i(TAG, "ClassLoader: " + classLoader);
             Class<?> clazz = null;
             try {
                 clazz = Class.forName("de.robv.android.xposed.XC_MethodHook", false, classLoader);
-                if(clazz != null){
+                if (clazz != null) {
                     Log.i(TAG, "ClassLoader: " + classLoader + "      class: " + clazz);
                     return true;
                 }
@@ -44,8 +41,6 @@ public class XposedCheck {
         }
         return false;
     }
-
-
 
     private boolean checkPmBundle(Context context) {
         PackageManager packageManager = context.getPackageManager();
@@ -58,11 +53,6 @@ public class XposedCheck {
                 if (metaData.get("lspatch") != null || metaData.get("xposedmodule") != null ||
                         metaData.get("xposeddescription") != null || metaData.get("xposedminversion") != null ||
                         metaData.get("jshook") != null) {
-//                    Log.i(TAG, "lspath: " + metaData.get("lspatch"));
-//                    Log.i(TAG, "xposedmodule: " + metaData.get("xposedmodule"));
-//                    Log.i(TAG, "xposeddescription: " + metaData.get("xposeddescription"));
-//                    Log.i(TAG, "xposedminversion: " + metaData.get("xposedminversion"));
-//                    Log.i(TAG, "jshook: " + metaData.get("jshook"));
                     return true;
                 }
             }

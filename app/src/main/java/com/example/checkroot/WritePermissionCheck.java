@@ -1,4 +1,5 @@
 package com.example.checkroot;
+
 import android.util.Log;
 
 import com.example.monitordevice.CheckRootActivity;
@@ -9,8 +10,8 @@ import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 // 检测特殊路径是否有读写权限检测root
-public class WritePermissionCheck extends RootCheck{
-    public WritePermissionCheck(CheckRootActivity checkRootActivity){
+public class WritePermissionCheck extends RootCheck {
+    public WritePermissionCheck(CheckRootActivity checkRootActivity) {
         super(checkRootActivity);
     }
 
@@ -44,7 +45,7 @@ public class WritePermissionCheck extends RootCheck{
     public boolean check() {
         String[] lines = mountReader();
 
-        if (lines == null){
+        if (lines == null) {
             return false;
         }
 
@@ -71,7 +72,7 @@ public class WritePermissionCheck extends RootCheck{
             }
 
             // 遍历所有不应具有读写权限的路径
-            for(String pathToCheck: this.NotWritePermissionPaths) {
+            for (String pathToCheck : this.NotWritePermissionPaths) {
                 if (mountPoint.equalsIgnoreCase(pathToCheck)) {
                     // 对于Android版本高于Marshmallow的设备，需要从挂载选项中移除括号
                     if (android.os.Build.VERSION.SDK_INT > android.os.Build.VERSION_CODES.M) {
@@ -80,8 +81,8 @@ public class WritePermissionCheck extends RootCheck{
                     }
 
                     // 分割挂载选项并检查是否包含"rw"，以确定该路径是否以读写模式挂载
-                    for (String option : mountOptions.split(",")){
-                        if (option.equalsIgnoreCase("rw")){
+                    for (String option : mountOptions.split(",")) {
+                        if (option.equalsIgnoreCase("rw")) {
                             // 如果路径以读写模式挂载，显示警告信息
                             Log.i(TAG, "Detected Root!!!(Java)");
                             Log.i(TAG, pathToCheck + " The path is mounted with rw permissions " + line);

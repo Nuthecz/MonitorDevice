@@ -1,17 +1,13 @@
 package com.example.monitordevice;
+
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.checkhook.FridaCheck;
 import com.example.checkhook.HookCheck;
 import com.example.checkhook.XposedCheck;
-import com.example.checkroot.BuildCheck;
-import com.example.checkroot.FileCheck;
-import com.example.checkroot.SuCheck;
-import com.example.checkroot.WritePermissionCheck;
 import com.example.monitordevice.databinding.ActivityCheckHookBinding;
 
 public class CheckHookActivity extends BaseActivity {
@@ -30,6 +26,7 @@ public class CheckHookActivity extends BaseActivity {
         setupButtonClickListener();
 
     }
+
     private void setupButtonClickListener() {
         // 设置所有按钮的点击监听器
         Button[] buttons = {
@@ -56,7 +53,7 @@ public class CheckHookActivity extends BaseActivity {
             Log.d(TAG, "You Clicked the CheckXposed");
             String xposedRet = new XposedCheck(this).checkXposed();
             outputHook.setText(xposedRet);
-        } else if(button == binding.backHook){
+        } else if (button == binding.backHook) {
             Log.i(TAG, "CheckHookActivity is over");
             finish();
         }

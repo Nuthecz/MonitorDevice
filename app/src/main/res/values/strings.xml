@@ -22,4 +22,9 @@
     <string name="xposed">Xposed</string>
     <string name="check_Xposed">checkXposed</string>
     <string name="so_check_Xposed">soCheckXposed</string>
+    <string name="check_serial">checkSerial</string>
+    <string name="check_disk">checkDisk</string>
+    <string name="check_kernel">checkKernel</string>
+    <string name="check_cpu">checkCpu</string>
+    <string name="check_system">checkSystem</string>
 </resources>

@@ -22,3 +22,18 @@ typedef struct ExecSection {
     unsigned long startAddrinMem;
     bool isCorrect = false; // 是否完成
 } sectionResult;
+
+
+struct StatFInfo {
+    char filePath[256]; // 文件路径
+    unsigned long long id; // 文件系统 ID
+    unsigned int namelen; // 最大文件名长度
+    unsigned int type; // 文件系统类型
+    unsigned int blockSize; // 块大小
+    unsigned int fundamentalBlockSize; // 基本块大小
+    unsigned long long blocksTotal; // 总块数
+    unsigned long long blocksFree; // 空闲块数
+    unsigned long long blocksAvailable; // 可用块数
+    unsigned long long inodesTotal; // 总inode数
+    unsigned long long inodesFree; // 空闲inode数
+};

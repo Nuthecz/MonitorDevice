@@ -17,6 +17,7 @@ public class CheckRootActivity extends BaseActivity {
     private ActivityCheckRootBinding binding;
     private TextView outputRoot;
     private boolean flag = false;
+
     static {
         System.loadLibrary("checkroot");
     }
@@ -52,41 +53,42 @@ public class CheckRootActivity extends BaseActivity {
         if (button == binding.checkSu) {
             Log.d(TAG, "You Clicked the CheckSu");
             flag = new SuCheck(this).check();
-            if(flag){
+            if (flag) {
                 outputRoot.setText("The \"which su\" command exist");
             }
         } else if (button == binding.checkFile) {
             Log.d(TAG, "You Clicked the CheckFile");
             flag = new FileCheck(this).check();
-            if(flag){
+            if (flag) {
                 outputRoot.setText("Illegal binary exist");
             }
         } else if (button == binding.checkWritePermission) {
             Log.d(TAG, "You Clicked the checkWritePermission");
             flag = new WritePermissionCheck(this).check();
-            if(flag){
+            if (flag) {
                 outputRoot.setText("There is a path with rw permissions");
             }
         } else if (button == binding.checkBuild) {
             Log.d(TAG, "You Clicked the checkBuild");
             flag = new BuildCheck(this).check();
-            if(flag){
+            if (flag) {
                 outputRoot.setText("build Detect Root");
             }
         } else if (button == binding.checkUseSo) {
             Log.d(TAG, "You Clicked the checkUseSo");
             flag = checkUseso(FileCheck.targetPaths, FileCheck.fileNames);
-            if(flag){
+            if (flag) {
                 outputRoot.setText("Illegal binary exist");
             }
-        } else if (button == binding.backRoot){
+        } else if (button == binding.backRoot) {
             Log.i(TAG, "CheckRootActivity is over");
             finish();
         }
 
-        if(!flag){
+        if (!flag) {
             outputRoot.setText("No Root Detected");
         }
     }
+
     public native boolean checkUseso(String[] targetPaths, String[] fileNames);
 }

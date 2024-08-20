@@ -1,5 +1,6 @@
 #include "local_dlfcn.h"
 #include "basic.h"
+
 #ifdef __LP64__
 #define Elf_Ehdr Elf64_Ehdr
 #define Elf_Shdr Elf64_Shdr
@@ -15,7 +16,7 @@
  * @param lib_path so文件路径
  * @return 句柄
  */
-void *local_dlopen(const char* lib_path){
+void *local_dlopen(const char *lib_path) {
     int fd = open(lib_path, O_RDONLY);
     if (fd < 0) {
         return NULL;
@@ -34,9 +35,10 @@ void *local_dlopen(const char* lib_path){
         return NULL;
     }
 
-    char* shoff = ((char *) elf) + elf->e_shoff;
-    struct local_dlfcn_handle* handle = (struct local_dlfcn_handle *) calloc(1,sizeof(struct local_dlfcn_handle));
-    handle->elf = (char *)elf;
+    char *shoff = ((char *) elf) + elf->e_shoff;
+    struct local_dlfcn_handle *handle = (struct local_dlfcn_handle *) calloc(1,
+                                                                             sizeof(struct local_dlfcn_handle));
+    handle->elf = (char *) elf;
     handle->size = size;
     for (int k = 0; k < elf->e_shnum; k++, shoff += elf->e_shentsize) {
         Elf_Shdr *sh = (Elf_Shdr *) shoff;
@@ -44,7 +46,7 @@ void *local_dlopen(const char* lib_path){
 
         switch (sh->sh_type) {
             case SHT_DYNSYM:
-                if (handle->dynsym){
+                if (handle->dynsym) {
                     goto tail;
                 }
                 handle->dynsym = static_cast<char *>(malloc(sh->sh_size));
@@ -85,14 +87,14 @@ void *local_dlopen(const char* lib_path){
  * @param sym_name 符号名
  * @return 符号在so文件中的偏移
  */
-off_t local_dlsym(void *handle,const char *sym_name){
-    struct local_dlfcn_handle* h = (struct local_dlfcn_handle*)handle;
+off_t local_dlsym(void *handle, const char *sym_name) {
+    struct local_dlfcn_handle *h = (struct local_dlfcn_handle *) handle;
     Elf_Sym *sym = (Elf_Sym *) h->dynsym;
     char *strings = h->dynstr;
     int dynsym_sh_ndx = 0;
     off_t dynsym_st_value = 0;
     int found_sym = 0;
-    for(int i = 0; i < h->nsyms;sym++,i++){
+    for (int i = 0; i < h->nsyms; sym++, i++) {
         if (strcmp(strings + sym->st_name, sym_name) == 0) {
             dynsym_st_value = sym->st_value;
             dynsym_sh_ndx = sym->st_shndx;
@@ -100,13 +102,13 @@ off_t local_dlsym(void *handle,const char *sym_name){
 //            LOGD("%s %s found at %p,st_shndx = %ld",__func__, sym_name, dynsym_st_value,sym->st_shndx);
         }
     }
-    if(!found_sym){
+    if (!found_sym) {
         return -1;
     }
-    Elf_Ehdr *elf = (Elf_Ehdr *)h->elf;
-    char* shoff = ((char *) elf) + elf->e_shoff;
-    for(int i = 0;elf->e_shnum;i++,shoff += elf->e_shentsize){
-        if(dynsym_sh_ndx == i){
+    Elf_Ehdr *elf = (Elf_Ehdr *) h->elf;
+    char *shoff = ((char *) elf) + elf->e_shoff;
+    for (int i = 0; elf->e_shnum; i++, shoff += elf->e_shentsize) {
+        if (dynsym_sh_ndx == i) {
             Elf_Shdr *sh = (Elf_Shdr *) shoff;
             return sh->sh_offset + dynsym_st_value - sh->sh_addr;
         }
@@ -118,11 +120,11 @@ off_t local_dlsym(void *handle,const char *sym_name){
  * 关闭句柄
  * @param handle 句柄
  */
-void local_dlclose(void *handle){
-    if(handle){
+void local_dlclose(void *handle) {
+    if (handle) {
         struct local_dlfcn_handle *h = (struct local_dlfcn_handle *) handle;
-        if(h->dynstr) free(h->dynstr);
-        if(h->dynsym) free(h->dynsym);
+        if (h->dynstr) free(h->dynstr);
+        if (h->dynsym) free(h->dynsym);
         if (h->elf != MAP_FAILED) {
             munmap(h->elf, h->size);
         }

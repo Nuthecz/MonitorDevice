@@ -135,14 +135,14 @@ Java_com_example_checkhook_FridaCheck_checkFrida(
     }
 
     if (check_maps()) {
-        if(!result.empty()) result += "\n";
+        if (!result.empty()) result += "\n";
         LOGI("Detected Frida!!!(So)");
         LOGI("Maps Detected");
         result += "Maps Detected";
     }
 
     if (check_maps_self()) {
-        if(!result.empty()) result += "\n";
+        if (!result.empty()) result += "\n";
         LOGI("Detected Frida!!!(So)");
         LOGI("Maps Self-fulfillment Detected");
         result += "Maps Self-fulfillment Detected";
