@@ -42,6 +42,7 @@ public class MainActivity extends BaseActivity {
                 .addSubMenu(Color.parseColor("#88bef5"), R.drawable.icon_root)
                 .addSubMenu(Color.parseColor("#83e85a"), R.drawable.icon_hook)
                 .addSubMenu(Color.parseColor("#FF4B32"), R.drawable.icon_phone)
+                .addSubMenu(Color.parseColor("#ba53de"), R.drawable.icon_env)
                 .setOnMenuSelectedListener(new OnMenuSelectedListener() {
                     @Override
                     public void onMenuSelected(int index) {
@@ -63,6 +64,12 @@ public class MainActivity extends BaseActivity {
                                 constraintLayout.setBackgroundColor(Color.parseColor("#fac4a2"));
                                 Log.d(TAG, "You Click the CheckDeviceActivity");
                                 intent = new Intent(MainActivity.this, CheckDeviceActivity.class);
+                                break;
+                            case 3:
+                                Toast.makeText(MainActivity.this, "You Click the CheckEnv Activity", Toast.LENGTH_SHORT).show();
+                                constraintLayout.setBackgroundColor(Color.parseColor("#d3cde6"));
+                                Log.d(TAG, "You Click the CheckEnvActivity");
+                                intent = new Intent(MainActivity.this, CheckEnvActivity.class);
                                 break;
                         }
                         handler.postDelayed(() -> {

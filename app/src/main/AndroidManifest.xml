@@ -13,6 +13,9 @@
         android:theme="@style/Theme.MonitorDevice"
         tools:targetApi="31">
         <activity
+            android:name=".CheckEnvActivity"
+            android:exported="false" />
+        <activity
             android:name=".CheckDeviceActivity"
             android:exported="false" />
         <activity

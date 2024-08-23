@@ -61,8 +61,7 @@ public class CheckDeviceActivity extends BaseActivity {
             }
         } else if (button == binding.checkSystem) {
             Log.d(TAG, "You Clicked the CheckSystem");
-            retval = new SystemGet(this).getBuildInfo();
-            retval += new SystemGet(this).getBaseband();
+            retval = new SystemGet(this).getSystemInfo();
             if (!retval.isEmpty()) {
                 outputDevice.setText(retval);
             }

@@ -27,4 +27,8 @@
     <string name="check_kernel">checkKernel</string>
     <string name="check_cpu">checkCpu</string>
     <string name="check_system">checkSystem</string>
+    <string name="check_Emu">checkEmu</string>
+    <string name="check_cloud">checkCloud</string>
+    <string name="check_sandbox">checkSandbox</string>
+    <string name="env">Environment</string>
 </resources>

@@ -53,6 +53,11 @@ add_library(
         SHARED
         checkdevice.cpp
 )
+add_library(
+        checkenv
+        SHARED
+        checkenv.cpp
+)
 # Specifies libraries CMake should link to your target library. You
 # can link libraries from various origins, such as libraries defined in this
 # build script, prebuilt third-party libraries, or Android system libraries.
@@ -70,6 +75,11 @@ target_link_libraries(
 )
 target_link_libraries(
         checkdevice
+        android
+        log
+)
+target_link_libraries(
+        checkenv
         android
         log
 )

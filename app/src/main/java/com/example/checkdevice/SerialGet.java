@@ -13,7 +13,7 @@ public class SerialGet extends DeviceCheck {
         super(checkDeviceActivity);
     }
 
-    public String getSerialNumbers1() {
+    private String getSerialNumbers1() {
         @SuppressLint("HardwareIds")
         String serial = Settings.Secure.getString(checkDeviceActivity.getContentResolver(), Settings.Secure.ANDROID_ID);
         return serial;

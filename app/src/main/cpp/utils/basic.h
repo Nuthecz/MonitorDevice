@@ -4,7 +4,7 @@
 #include <linux/elf.h>
 #include <unistd.h>
 #include <jni.h>
-#include <stdio.h>
+#include <cstdio>
 #include <string>
 
 // 配置日志
