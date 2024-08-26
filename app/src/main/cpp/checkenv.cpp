@@ -144,7 +144,7 @@ Java_com_example_checkenv_EmulatorCheck_checkEmu(JNIEnv *env, jobject thiz) {
 
 extern "C"
 JNIEXPORT jstring JNICALL
-Java_com_example_checkenv_SandboxCheck_checkSandbox(JNIEnv *env, jobject thiz) {
+Java_com_example_checkenv_SandboxCheck_checkSandboxProcess(JNIEnv *env, jobject thiz) {
     // 通过 ps -ef 检测是否存在其他进程
     char buffer[1024];
     FILE *fp = popen("ps -ef", "r"); // “r” 则文件指针连接到 command 的标准输出，“w” 则文件指针连接到 command 的标准输入
@@ -164,9 +164,9 @@ Java_com_example_checkenv_SandboxCheck_checkSandbox(JNIEnv *env, jobject thiz) {
     pclose(fp);
     std::string result;
     if (size > 2) {
-        LOGI("Detected Sandbox!!!(File)");
+        LOGI("Detected Sandbox!!!(retval)");
         LOGI("Sandbox Detected");
-        result += "Sandbox Detected";
+        result += "Sandbox Process Detected";
     }
     return env->NewStringUTF(result.c_str());
 }

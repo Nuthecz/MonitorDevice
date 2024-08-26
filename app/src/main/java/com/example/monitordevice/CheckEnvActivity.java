@@ -1,10 +1,7 @@
 package com.example.monitordevice;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.BatteryManager;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
@@ -64,15 +61,15 @@ public class CheckEnvActivity extends BaseActivity {
             if (!retval.isEmpty()) {
                 outputEnv.setText(retval);
             }
-        } else if(button == binding.checkCloud){
+        } else if (button == binding.checkCloud) {
             Log.d(TAG, "You Clicked the CheckCloud");
             retval = new CloudCheck(this).detectionCloud();
             if (!retval.isEmpty()) {
                 outputEnv.setText(retval);
             }
-        } else if(button == binding.checkSandbox){
+        } else if (button == binding.checkSandbox) {
             Log.d(TAG, "You Clicked the CheckSandbox");
-            retval = new SandboxCheck(this).checkSandbox();
+            retval = new SandboxCheck(this).detectionSandbox();
             if (!retval.isEmpty()) {
                 outputEnv.setText(retval);
             }

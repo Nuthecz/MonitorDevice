@@ -93,7 +93,7 @@ public class XposedCheck {
             Log.i(TAG, "PackageName Detection");
             result += "PackageName Detection";
         }
-        if(result.isEmpty()){
+        if (result.isEmpty()) {
             result = "No Xposed Detection";
         }
         return result;

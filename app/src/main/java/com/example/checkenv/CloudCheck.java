@@ -96,6 +96,7 @@ public class CloudCheck extends EnvCheck {
             flag = true;
         }
 
+        // 传感器名称检测
         ArrayList<Sensor> aospSensor = new ArrayList<>();
         for (Sensor sensor : sensorlist) {
             if (sensor.getVendor().contains("AOSP")) {
