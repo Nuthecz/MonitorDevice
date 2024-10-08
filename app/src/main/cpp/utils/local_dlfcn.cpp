@@ -1,5 +1,4 @@
 #include "local_dlfcn.h"
-#include "basic.h"
 
 #ifdef __LP64__
 #define Elf_Ehdr Elf64_Ehdr

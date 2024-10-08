@@ -13,19 +13,19 @@
         android:theme="@style/Theme.MonitorDevice"
         tools:targetApi="31">
         <activity
-            android:name=".CheckEnvActivity"
+            android:name="com.nuthecz.monitordevice.CheckEnvActivity"
             android:exported="false" />
         <activity
-            android:name=".CheckDeviceActivity"
+            android:name="com.nuthecz.monitordevice.CheckDeviceActivity"
             android:exported="false" />
         <activity
-            android:name=".CheckHookActivity"
+            android:name="com.nuthecz.monitordevice.CheckHookActivity"
             android:exported="false" />
         <activity
-            android:name=".CheckRootActivity"
+            android:name="com.nuthecz.monitordevice.CheckRootActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name="com.nuthecz.monitordevice.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

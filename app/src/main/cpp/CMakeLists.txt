@@ -5,14 +5,18 @@
 # Sets the minimum CMake version required for this project.
 cmake_minimum_required(VERSION 3.22.1)
 include_directories(
-        utils/basic.h
+        include/config.h
 )
+
+# Enable C++11
+set(CMAKE_CXX_STANDARD 20)
 # Declares the project name. The project name can be accessed via ${ PROJECT_NAME},
 # Since this is the top level CMakeLists.txt, the project name is also accessible
 # with ${CMAKE_PROJECT_NAME} (both CMake variables are in-sync within the top level
 # build script scope).
-project("monitordevice")
+project("monitor")
 enable_language(ASM)
+link_libraries(z)
 
 # Creates and names a library, sets it as either STATIC
 # or SHARED, and provides the relative paths to its source code.
@@ -29,57 +33,39 @@ enable_language(ASM)
 # used in the AndroidManifest.xml file.
 add_library(
         # so 文件的名字
-        checkroot
+        devicecheck
         # 共享库
         SHARED
         # List C/C++ source files with relative paths to this CMakeLists.txt.
-        checkroot.cpp)
+        include/deviceDetection.h
+        dectection/deviceDetection.cpp
+        dectection/jni_device.cpp
+)
 add_library(
-        # so 文件的名字
-        checkhook
-        # 共享库
+        hookcheck
         SHARED
-        # List C/C++ source files with relative paths to this CMakeLists.txt.
-        checkfrida.cpp
         utils/local_dlfcn.h
         utils/local_dlfcn.cpp
         asm/bionic_asm.h
         asm/syscall.S
-        checkhook.cpp
-        checkxposed.cpp
+        include/elf_util.h
+        include/hookDetection.h
+        utils/elf_util.cpp
+        dectection/hookDetection.cpp
+        dectection/jni_hook.cpp
 )
-add_library(
-        checkdevice
-        SHARED
-        checkdevice.cpp
-)
-add_library(
-        checkenv
-        SHARED
-        checkenv.cpp
-)
-# Specifies libraries CMake should link to your target library. You
-# can link libraries from various origins, such as libraries defined in this
-# build script, prebuilt third-party libraries, or Android system libraries.
+## Specifies libraries CMake should link to your target library. You
+## can link libraries from various origins, such as libraries defined in this
+## build script, prebuilt third-party libraries, or Android system libraries.
 target_link_libraries(
-        checkroot
+        devicecheck
         # List libraries link to the target library
         android
         log
 )
 target_link_libraries(
-        checkhook
+        hookcheck
         # List libraries link to the target library
-        android
-        log
-)
-target_link_libraries(
-        checkdevice
-        android
-        log
-)
-target_link_libraries(
-        checkenv
         android
         log
 )
