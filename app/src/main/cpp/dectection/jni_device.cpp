@@ -7,9 +7,7 @@
 
 // root 检测
 extern "C"
-JNIEXPORT jboolean
-
-JNICALL
+JNIEXPORT jboolean JNICALL
 Java_com_nuthecz_monitordevice_CheckRootActivity_checkUseso(
         JNIEnv *env,
         jobject /* this */,
@@ -47,9 +45,7 @@ Java_com_nuthecz_monitordevice_CheckRootActivity_checkUseso(
 
 // device 检测
 extern "C"
-JNIEXPORT jstring
-
-JNICALL
+JNIEXPORT jstring JNICALL
 Java_com_nuthecz_checkdevice_DeviceCheck_getHardDiskInfor(JNIEnv *env, jobject thiz) {
     // 获取 StatFs 类
     jclass statFsClass = env->FindClass("android/os/StatFs");
@@ -96,9 +92,7 @@ Java_com_nuthecz_checkdevice_DeviceCheck_getHardDiskInfor(JNIEnv *env, jobject t
 }
 
 extern "C"
-JNIEXPORT jstring
-
-JNICALL
+JNIEXPORT jstring JNICALL
 Java_com_nuthecz_checkdevice_DeviceCheck_getKernelInfor(JNIEnv *env, jobject thiz) {
     char buffer[1024];
     FILE *fp = popen("uname -a", "r"); // “r” 则文件指针连接到 command 的标准输出，“w” 则文件指针连接到 command 的标准输入
@@ -112,9 +106,7 @@ Java_com_nuthecz_checkdevice_DeviceCheck_getKernelInfor(JNIEnv *env, jobject thi
 }
 
 extern "C"
-JNIEXPORT jstring
-
-JNICALL
+JNIEXPORT jstring JNICALL
 Java_com_nuthecz_checkenv_EmulatorCheck_checkEmu(JNIEnv *env, jobject thiz) {
     std::string result;
     if (simulator_files_check()) {
@@ -131,9 +123,7 @@ Java_com_nuthecz_checkenv_EmulatorCheck_checkEmu(JNIEnv *env, jobject thiz) {
 
 
 extern "C"
-JNIEXPORT jstring
-
-JNICALL
+JNIEXPORT jstring JNICALL
 Java_com_nuthecz_checkenv_SandboxCheck_checkSandboxProcess(JNIEnv *env, jobject thiz) {
     // 通过 ps -ef 检测是否存在其他进程
     char buffer[1024];

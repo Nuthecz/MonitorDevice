@@ -5,9 +5,7 @@
 #include "../include/hookDetection.h"
 
 extern "C"
-JNIEXPORT jstring
-
-JNICALL
+JNIEXPORT jstring JNICALL
 Java_com_nuthecz_checkhook_HookCheck_checkHook(JNIEnv *env, jobject thiz) {
     std::string result;
     // 检测inlineHook，它比 frida 处的 inlineHook 更为强力
@@ -35,9 +33,7 @@ Java_com_nuthecz_checkhook_HookCheck_checkHook(JNIEnv *env, jobject thiz) {
 }
 
 extern "C"
-JNIEXPORT jstring
-
-JNICALL
+JNIEXPORT jstring JNICALL
 Java_com_nuthecz_checkhook_FridaCheck_checkFrida(
         JNIEnv *env,
         jobject /* this */) {
@@ -69,9 +65,7 @@ Java_com_nuthecz_checkhook_FridaCheck_checkFrida(
 }
 
 extern "C"
-JNIEXPORT jstring
-
-JNICALL
+JNIEXPORT jstring JNICALL
 Java_com_nuthecz_checkhook_XposedCheck_soCheckXposed(JNIEnv *env, jobject thiz) {
     std::string result;
 
@@ -89,6 +83,28 @@ Java_com_nuthecz_checkhook_XposedCheck_soCheckXposed(JNIEnv *env, jobject thiz) 
         LOGI("Detected Xposed!!!(So)");
         LOGI("StackTrace Detected");
         result += "StackTrace Detected(So)";
+    }
+    return env->NewStringUTF(result.c_str());
+}
+
+extern "C"
+JNIEXPORT jstring JNICALL
+Java_com_nuthecz_monitordevice_CheckHookActivity_checkStack(JNIEnv *env, jobject thiz) {
+    std::string result = "Initial Dectection\n";
+    int res = callStackDetection(env);
+    switch (res) {
+        case 0:
+            result += "No Hook Detected";
+            break;
+        case 1:
+            result += "Rpc Hook Detected";
+            break;
+        case 2:
+            result += "Xposed Hook Detected";
+            break;
+        case 3:
+            result += "Frida Hook Detected";
+            break;
     }
     return env->NewStringUTF(result.c_str());
 }

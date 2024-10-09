@@ -7,7 +7,7 @@ public class FridaCheck {
     protected final static String TAG = "nuthecz";
 
     static {
-        System.loadLibrary("hookcheck");
+        System.loadLibrary("hook");
     }
 
     public FridaCheck(CheckHookActivity checkHookActivity) {

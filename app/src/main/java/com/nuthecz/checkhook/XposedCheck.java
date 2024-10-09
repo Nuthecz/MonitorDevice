@@ -20,7 +20,7 @@ public class XposedCheck {
     protected final static String TAG = "nuthecz";
 
     static {
-        System.loadLibrary("hookcheck");
+        System.loadLibrary("hook");
     }
 
     public XposedCheck(CheckHookActivity checkHookActivity) {

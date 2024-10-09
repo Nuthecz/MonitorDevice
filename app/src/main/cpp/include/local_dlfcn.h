@@ -1,7 +1,7 @@
 #ifndef LOCAL_DLFCN_H
 #define LOCAL_DLFCN_H
 
-#include "../include/config.h"
+#include "config.h"
 #include <fcntl.h>
 #include <sys/mman.h>
 #include <elf.h>

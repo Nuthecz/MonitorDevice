@@ -33,7 +33,7 @@ link_libraries(z)
 # used in the AndroidManifest.xml file.
 add_library(
         # so 文件的名字
-        devicecheck
+        device
         # 共享库
         SHARED
         # List C/C++ source files with relative paths to this CMakeLists.txt.
@@ -42,11 +42,11 @@ add_library(
         dectection/jni_device.cpp
 )
 add_library(
-        hookcheck
+        hook
         SHARED
-        utils/local_dlfcn.h
+        include/local_dlfcn.h
         utils/local_dlfcn.cpp
-        asm/bionic_asm.h
+        include/bionic_asm.h
         asm/syscall.S
         include/elf_util.h
         include/hookDetection.h
@@ -58,13 +58,13 @@ add_library(
 ## can link libraries from various origins, such as libraries defined in this
 ## build script, prebuilt third-party libraries, or Android system libraries.
 target_link_libraries(
-        devicecheck
+        device
         # List libraries link to the target library
         android
         log
 )
 target_link_libraries(
-        hookcheck
+        hook
         # List libraries link to the target library
         android
         log

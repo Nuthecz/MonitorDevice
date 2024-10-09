@@ -7,7 +7,7 @@ public class DeviceCheck {
     protected final static String TAG = "nuthecz";
 
     static {
-        System.loadLibrary("devicecheck");
+        System.loadLibrary("device");
     }
 
     public DeviceCheck(CheckDeviceActivity checkDeviceActivity) {

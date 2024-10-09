@@ -15,6 +15,10 @@ public class CheckHookActivity extends BaseActivity {
     private ActivityCheckHookBinding binding;
     private TextView outputHook;
 
+    static {
+        System.loadLibrary("hook");
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,7 +28,9 @@ public class CheckHookActivity extends BaseActivity {
         setContentView(binding.getRoot());
         outputHook = binding.outputHook;
         setupButtonClickListener();
-
+        // 栈检测不能使用按钮调用，会造成栈错误，因此在这里添加初始检测
+        String ret = checkStack();
+        outputHook.setText(ret);
     }
 
     private void setupButtonClickListener() {
@@ -58,4 +64,6 @@ public class CheckHookActivity extends BaseActivity {
             finish();
         }
     }
+
+    public native String checkStack();
 }

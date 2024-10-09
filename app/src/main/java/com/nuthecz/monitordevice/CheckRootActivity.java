@@ -19,7 +19,7 @@ public class CheckRootActivity extends BaseActivity {
     private boolean flag = false;
 
     static {
-        System.loadLibrary("devicecheck");
+        System.loadLibrary("device");
     }
 
     @Override

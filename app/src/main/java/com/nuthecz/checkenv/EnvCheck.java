@@ -7,7 +7,7 @@ public class EnvCheck {
     protected final static String TAG = "nuthecz";
 
     static {
-        System.loadLibrary("devicecheck");
+        System.loadLibrary("device");
     }
 
     public EnvCheck(CheckEnvActivity checkEnvActivity) {

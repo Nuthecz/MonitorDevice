@@ -151,19 +151,7 @@ bool prettyMethodHookStatus() {
     return isHook;
 }
 
-std::string jstringToString(JNIEnv *env, jstring jStr) {
-    if (!jStr) {
-        return "";
-    }
-
-    const char *chars = env->GetStringUTFChars(jStr, nullptr);
-    std::string str(chars);
-    env->ReleaseStringUTFChars(jStr, chars);
-
-    return str;
-}
-
-void callStackDetection(JNIEnv *env, jstring jClassName) {
+int callStackDetection(JNIEnv *env) {
     // 使用 "../include/obfs-string.h" 的字符串混淆功能
     SandHook::ElfImg libart("libart.so");
 
@@ -174,8 +162,7 @@ void callStackDetection(JNIEnv *env, jstring jClassName) {
     jobject(*my_nativeFillInStackTrace)(JNIEnv * , jclass); // 函数指针
     my_nativeFillInStackTrace = reinterpret_cast<jobject (*)(JNIEnv *,
                                                              jclass)>(nativeFillInStackTrace);
-    std::string className = jstringToString(env, jClassName);
-    jclass MainActivity = env->FindClass(className.c_str());
+    jclass MainActivity = env->FindClass("com/nuthecz/monitordevice/CheckHookActivity");
     jobject javaStackState = my_nativeFillInStackTrace(env, MainActivity);
 
     // 获取 libart nativeGetStackTrace，获取 objAry
@@ -219,7 +206,7 @@ void callStackDetection(JNIEnv *env, jstring jClassName) {
             mySet.insert(des);
         } else {
             LOGE("xposed hook detected");
-            return;
+            return 2;
         }
     }
 
@@ -230,14 +217,14 @@ void callStackDetection(JNIEnv *env, jstring jClassName) {
         if (strstr(last.c_str(), "com.android.internal.os.ZygoteInit -> main") ||
             strstr(last.c_str(), "java.lang.Thread -> run")) {
             LOGI("all is right");
-            return;
+            return 0;
         } else {
             LOGE("rpc hook detected");
-            return;
+            return 1;
         }
     } else {
         LOGE("frida hook detected");
-        return;
+        return 3;
     }
 }
 

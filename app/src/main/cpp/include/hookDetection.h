@@ -9,7 +9,7 @@
 
 #include "../include/elf_util.h"
 #include "../include/config.h"
-#include "../utils/local_dlfcn.h"
+#include "local_dlfcn.h"
 #include <jni.h>
 #include <list>
 #include <string>
@@ -30,7 +30,7 @@ bool segmentHookStatus();
 bool prettyMethodHookStatus();
 
 // 利用 java 层调用栈检测 hook 工具存在状态，主要是解析 StackTraceElement[] 这个数组来进行检测
-void callStackDetection(JNIEnv *env, jstring jClassName);
+int callStackDetection(JNIEnv *env);
 
 // frida 检测
 #define MAX_PATH 256
